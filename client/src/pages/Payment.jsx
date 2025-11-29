@@ -88,21 +88,27 @@ function Payment() {
 
       const { paymentSessionId, orderId } = orderResponse.data;
 
-      // Initialize Cashfree checkout
+      // Store orderId in sessionStorage for callback handling
+      sessionStorage.setItem('lastOrderId', orderId);
+
+      // Initialize Cashfree checkout with redirect URL
       const checkoutOptions = {
         paymentSessionId: paymentSessionId,
         redirectTarget: '_self',
+        // Add redirect URL for callback handling
+        redirectUrl: `${window.location.origin}/payment-callback`
       };
 
       cashfree.checkout(checkoutOptions).then(async (result) => {
         if (result.error) {
           setError(result.error.message || 'Payment failed');
           setLoading(false);
+          sessionStorage.removeItem('lastOrderId');
           return;
         }
 
-        // Payment completed, verify payment
-        setTimeout(async () => {
+        // If payment is completed immediately (some payment methods)
+        if (result.paymentStatus === 'SUCCESS') {
           try {
             const verifyResponse = await axios.post(
               'http://localhost:8000/api/payment/verify',
@@ -111,6 +117,7 @@ function Payment() {
             );
 
             if (verifyResponse.data.success && verifyResponse.data.status === 'success') {
+              sessionStorage.removeItem('lastOrderId');
               navigate('/receipt', { state: { orderId: orderId } });
             } else {
               setError(verifyResponse.data.message || 'Payment verification failed');
@@ -121,11 +128,13 @@ function Payment() {
             setError('Payment verification failed. Please contact support.');
             setLoading(false);
           }
-        }, 2000);
+        }
+        // For redirect-based payments, user will be redirected to callback page
       }).catch((checkoutError) => {
         console.error('Checkout error:', checkoutError);
         setError('Payment initialization failed. Please try again.');
         setLoading(false);
+        sessionStorage.removeItem('lastOrderId');
       });
     } catch (err) {
       console.error('Payment error:', err);

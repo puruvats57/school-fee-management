@@ -9,6 +9,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminStudents from './pages/admin/AdminStudents';
 import AdminFees from './pages/admin/AdminFees';
 import AdminTransactions from './pages/admin/AdminTransactions';
+import PaymentCallback from './pages/PaymentCallback';
 import './App.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/otp" element={<OTPVerification />} />
         <Route path="/fees" element={<FeeDetails />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/payment-callback" element={<PaymentCallback />} />
         <Route path="/receipt" element={<Receipt />} />
         
         {/* Admin Routes */}

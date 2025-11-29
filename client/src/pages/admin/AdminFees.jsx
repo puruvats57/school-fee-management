@@ -41,11 +41,17 @@ function AdminFees() {
       const response = await axios.get('http://localhost:8000/api/admin/fees', {
         withCredentials: true
       });
+      console.log('[AdminFees] API Response:', response.data);
       if (response.data.success) {
-        setFees(response.data.fees);
+        setFees(response.data.fees || []);
+        console.log('[AdminFees] Fees loaded:', response.data.fees?.length || 0);
+      } else {
+        console.error('[AdminFees] API returned success=false:', response.data);
       }
     } catch (err) {
-      console.error('Error fetching fees:', err);
+      console.error('[AdminFees] Error fetching fees:', err);
+      console.error('[AdminFees] Error response:', err.response?.data);
+      setError(err.response?.data?.message || 'Failed to fetch fees');
     } finally {
       setLoading(false);
     }
@@ -187,42 +193,50 @@ function AdminFees() {
           <button onClick={() => handleOpenModal()} className="add-btn">+ Add Fee Record</button>
         </div>
 
+        {error && <div className="error-message" style={{ marginBottom: '20px' }}>{error}</div>}
+        
         <div className="table-container">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Student</th>
-                <th>Roll Number</th>
-                <th>Academic Year</th>
-                <th>Total Amount</th>
-                <th>Paid Amount</th>
-                <th>Due Amount</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fees.map(fee => (
-                <tr key={fee._id}>
-                  <td>{fee.studentId?.name || 'N/A'}</td>
-                  <td>{fee.studentId?.rollNumber || 'N/A'}</td>
-                  <td>{fee.academicYear}</td>
-                  <td>₹{fee.totalAmount.toFixed(2)}</td>
-                  <td>₹{fee.paidAmount.toFixed(2)}</td>
-                  <td>₹{fee.dueAmount.toFixed(2)}</td>
-                  <td>
-                    <span className={`status-badge ${fee.status}`}>
-                      {fee.status.toUpperCase()}
-                    </span>
-                  </td>
-                  <td>
-                    <button onClick={() => handleOpenModal(fee)} className="edit-btn">Edit</button>
-                    <button onClick={() => handleDelete(fee._id)} className="delete-btn">Delete</button>
-                  </td>
+          {fees.length === 0 ? (
+            <div style={{ padding: '40px', textAlign: 'center', color: '#666' }}>
+              <p>No fee records found. Click "+ Add Fee Record" to create one.</p>
+            </div>
+          ) : (
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Roll Number</th>
+                  <th>Academic Year</th>
+                  <th>Total Amount</th>
+                  <th>Paid Amount</th>
+                  <th>Due Amount</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {fees.map(fee => (
+                  <tr key={fee._id}>
+                    <td>{fee.studentId?.name || 'N/A'}</td>
+                    <td>{fee.studentId?.rollNumber || 'N/A'}</td>
+                    <td>{fee.academicYear}</td>
+                    <td>₹{fee.totalAmount.toFixed(2)}</td>
+                    <td>₹{fee.paidAmount.toFixed(2)}</td>
+                    <td>₹{fee.dueAmount.toFixed(2)}</td>
+                    <td>
+                      <span className={`status-badge ${fee.status}`}>
+                        {fee.status.toUpperCase()}
+                      </span>
+                    </td>
+                    <td>
+                      <button onClick={() => handleOpenModal(fee)} className="edit-btn">Edit</button>
+                      <button onClick={() => handleDelete(fee._id)} className="delete-btn">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 

@@ -42,11 +42,17 @@ function AdminStudents() {
       const response = await axios.get('http://localhost:8000/api/admin/students', {
         withCredentials: true
       });
+      console.log('[AdminStudents] API Response:', response.data);
       if (response.data.success) {
-        setStudents(response.data.students);
+        setStudents(response.data.students || []);
+        console.log('[AdminStudents] Students loaded:', response.data.students?.length || 0);
+      } else {
+        console.error('[AdminStudents] API returned success=false:', response.data);
       }
     } catch (err) {
-      console.error('Error fetching students:', err);
+      console.error('[AdminStudents] Error fetching students:', err);
+      console.error('[AdminStudents] Error response:', err.response?.data);
+      setError(err.response?.data?.message || 'Failed to fetch students');
     } finally {
       setLoading(false);
     }
@@ -141,36 +147,44 @@ function AdminStudents() {
           <button onClick={() => handleOpenModal()} className="add-btn">+ Add Student</button>
         </div>
 
+        {error && <div className="error-message" style={{ marginBottom: '20px' }}>{error}</div>}
+        
         <div className="table-container">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Roll Number</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Class</th>
-                <th>Section</th>
-                <th>Phone</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.map(student => (
-                <tr key={student._id}>
-                  <td>{student.rollNumber}</td>
-                  <td>{student.name}</td>
-                  <td>{student.email}</td>
-                  <td>{student.class}</td>
-                  <td>{student.section}</td>
-                  <td>{student.phone || '-'}</td>
-                  <td>
-                    <button onClick={() => handleOpenModal(student)} className="edit-btn">Edit</button>
-                    <button onClick={() => handleDelete(student._id)} className="delete-btn">Delete</button>
-                  </td>
+          {students.length === 0 ? (
+            <div style={{ padding: '40px', textAlign: 'center', color: '#666' }}>
+              <p>No students found. Click "+ Add Student" to create one.</p>
+            </div>
+          ) : (
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Roll Number</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Class</th>
+                  <th>Section</th>
+                  <th>Phone</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {students.map(student => (
+                  <tr key={student._id}>
+                    <td>{student.rollNumber}</td>
+                    <td>{student.name}</td>
+                    <td>{student.email}</td>
+                    <td>{student.class}</td>
+                    <td>{student.section}</td>
+                    <td>{student.phone || '-'}</td>
+                    <td>
+                      <button onClick={() => handleOpenModal(student)} className="edit-btn">Edit</button>
+                      <button onClick={() => handleDelete(student._id)} className="delete-btn">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 

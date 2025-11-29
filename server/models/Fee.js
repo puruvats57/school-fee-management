@@ -57,14 +57,22 @@ const feeSchema = new mongoose.Schema({
 
 feeSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
-  this.dueAmount = this.totalAmount - this.paidAmount;
   
-  if (this.paidAmount === 0) {
+  // Calculate due amount
+  const paid = this.paidAmount || 0;
+  const total = this.totalAmount || 0;
+  this.dueAmount = Math.max(0, total - paid);
+  
+  // Update status based on paid amount
+  if (paid === 0) {
     this.status = 'pending';
-  } else if (this.paidAmount < this.totalAmount) {
-    this.status = 'partial';
-  } else {
+  } else if (paid >= total) {
+    // If paid amount equals or exceeds total, mark as paid
     this.status = 'paid';
+    this.paidAmount = total; // Ensure paidAmount doesn't exceed total
+    this.dueAmount = 0;
+  } else {
+    this.status = 'partial';
   }
   
   next();

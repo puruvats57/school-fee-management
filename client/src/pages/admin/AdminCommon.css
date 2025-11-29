@@ -120,6 +120,7 @@
 .data-table td {
   padding: 12px;
   border-bottom: 1px solid #dee2e6;
+  color: #333;
 }
 
 .data-table tr:hover {

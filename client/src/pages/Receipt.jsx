@@ -43,8 +43,9 @@ function Receipt() {
   };
 
   const handleDownload = () => {
-    if (receiptData?.receipt?.receiptPath) {
-      window.open(`http://localhost:8000${receiptData.receipt.receiptPath}`, '_blank');
+    if (orderId) {
+      // Use the download endpoint (FR-17)
+      window.open(`http://localhost:8000/api/receipt/download/${orderId}`, '_blank');
     }
   };
 

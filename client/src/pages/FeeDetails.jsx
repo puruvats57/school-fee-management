@@ -7,10 +7,25 @@ function FeeDetails() {
   const [feeData, setFeeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [verifying, setVerifying] = useState(false);
+  const [verifyMessage, setVerifyMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     checkSessionAndFetchFees();
+    
+    // Refresh fees when page becomes visible (in case user comes back from payment)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        checkSessionAndFetchFees();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const checkSessionAndFetchFees = async () => {
@@ -65,6 +80,43 @@ function FeeDetails() {
   const handleDownloadReceipt = () => {
     if (feeData?.lastTransaction?.orderId) {
       window.open(`http://localhost:8000/api/receipt/download/${feeData.lastTransaction.orderId}`, '_blank');
+    }
+  };
+
+  const handleVerifyPayment = async () => {
+    const orderId = sessionStorage.getItem('lastOrderId');
+    if (!orderId) {
+      setVerifyMessage('No pending payment found. If you just completed a payment, please wait a moment and refresh the page.');
+      return;
+    }
+
+    setVerifying(true);
+    setVerifyMessage('');
+    
+    try {
+      const verifyResponse = await axios.post(
+        'http://localhost:8000/api/payment/verify',
+        { orderId: orderId },
+        { withCredentials: true }
+      );
+
+      if (verifyResponse.data.success && verifyResponse.data.status === 'success') {
+        setVerifyMessage('✅ Payment verified successfully! Updating fee details...');
+        sessionStorage.removeItem('lastOrderId');
+        // Refresh fee details
+        setTimeout(() => {
+          checkSessionAndFetchFees();
+          setVerifying(false);
+          setVerifyMessage('');
+        }, 2000);
+      } else {
+        setVerifyMessage(verifyResponse.data.message || 'Payment verification failed. Payment may still be processing.');
+        setVerifying(false);
+      }
+    } catch (err) {
+      console.error('Verification error:', err);
+      setVerifyMessage(err.response?.data?.message || 'Error verifying payment. Please try again or contact support.');
+      setVerifying(false);
     }
   };
 
@@ -166,6 +218,34 @@ function FeeDetails() {
             <button onClick={handlePayNow} className="pay-now-btn">
               Proceed to Pay
             </button>
+            {sessionStorage.getItem('lastOrderId') && (
+              <div style={{ marginTop: '15px', padding: '15px', backgroundColor: '#fff3cd', borderRadius: '5px', border: '1px solid #ffc107' }}>
+                <p style={{ margin: '0 0 10px 0', fontSize: '0.9em', color: '#856404' }}>
+                  ⚠️ You have a pending payment. If you just completed payment on Cashfree, click below to verify:
+                </p>
+                <button 
+                  onClick={handleVerifyPayment} 
+                  className="verify-payment-btn"
+                  disabled={verifying}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: verifying ? 'not-allowed' : 'pointer',
+                    fontSize: '0.9em'
+                  }}
+                >
+                  {verifying ? 'Verifying...' : 'Verify Payment'}
+                </button>
+                {verifyMessage && (
+                  <p style={{ marginTop: '10px', fontSize: '0.85em', color: verifyMessage.includes('✅') ? '#28a745' : '#dc3545' }}>
+                    {verifyMessage}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

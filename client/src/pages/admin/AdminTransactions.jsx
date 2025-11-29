@@ -62,12 +62,17 @@ function AdminTransactions() {
       const response = await axios.get(`http://localhost:8000/api/admin/transactions?${params}`, {
         withCredentials: true
       });
+      console.log('[AdminTransactions] API Response:', response.data);
       if (response.data.success) {
-        setTransactions(response.data.transactions);
-        setSummary(response.data.summary);
+        setTransactions(response.data.transactions || []);
+        setSummary(response.data.summary || null);
+        console.log('[AdminTransactions] Transactions loaded:', response.data.transactions?.length || 0);
+      } else {
+        console.error('[AdminTransactions] API returned success=false:', response.data);
       }
     } catch (err) {
-      console.error('Error fetching transactions:', err);
+      console.error('[AdminTransactions] Error fetching transactions:', err);
+      console.error('[AdminTransactions] Error response:', err.response?.data);
     } finally {
       setLoading(false);
     }
@@ -180,36 +185,42 @@ function AdminTransactions() {
         </div>
 
         <div className="table-container">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Student</th>
-                <th>Roll Number</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Payment Method</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.map(transaction => (
-                <tr key={transaction._id}>
-                  <td>{transaction.orderId}</td>
-                  <td>{transaction.studentId?.name || 'N/A'}</td>
-                  <td>{transaction.studentId?.rollNumber || 'N/A'}</td>
-                  <td>₹{transaction.amount.toFixed(2)}</td>
-                  <td>
-                    <span className={`status-badge ${getStatusBadgeClass(transaction.status)}`}>
-                      {transaction.status.toUpperCase()}
-                    </span>
-                  </td>
-                  <td>{transaction.paymentMethod || '-'}</td>
-                  <td>{new Date(transaction.createdAt).toLocaleDateString('en-IN')}</td>
+          {transactions.length === 0 ? (
+            <div style={{ padding: '40px', textAlign: 'center', color: '#666' }}>
+              <p>No transactions found.</p>
+            </div>
+          ) : (
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Student</th>
+                  <th>Roll Number</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Payment Method</th>
+                  <th>Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {transactions.map(transaction => (
+                  <tr key={transaction._id}>
+                    <td>{transaction.orderId}</td>
+                    <td>{transaction.studentId?.name || 'N/A'}</td>
+                    <td>{transaction.studentId?.rollNumber || 'N/A'}</td>
+                    <td>₹{transaction.amount.toFixed(2)}</td>
+                    <td>
+                      <span className={`status-badge ${getStatusBadgeClass(transaction.status)}`}>
+                        {transaction.status.toUpperCase()}
+                      </span>
+                    </td>
+                    <td>{transaction.paymentMethod || '-'}</td>
+                    <td>{new Date(transaction.createdAt).toLocaleDateString('en-IN')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>
