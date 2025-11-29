@@ -1,95 +1,66 @@
 const express = require('express');
 const cors = require('cors');
-const crypto = require('crypto');
-const {
-    Cashfree
-} = require('cashfree-pg');
-
+const session = require('express-session');
+const { Cashfree } = require('cashfree-pg');
+const connectDB = require('./config/database');
 
 require('dotenv').config();
 
+// Connect to MongoDB
+connectDB();
+
 const app = express();
-app.use(cors());
+
+// Middleware
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  credentials: true
+}));
 app.use(express.json());
-app.use(express.urlencoded({
-    extended: true
+app.use(express.urlencoded({ extended: true }));
+
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
 }));
 
-
-
+// Cashfree configuration
 Cashfree.XClientId = process.env.CLIENT_ID;
 Cashfree.XClientSecret = process.env.CLIENT_SECRET;
-Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
+Cashfree.XEnvironment = process.env.CASHFREE_ENV === 'production' 
+  ? Cashfree.Environment.PRODUCTION 
+  : Cashfree.Environment.SANDBOX;
 
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/fees', require('./routes/fees'));
+app.use('/api/payment', require('./routes/payment'));
+app.use('/api/receipt', require('./routes/receipt'));
+app.use('/api/webhook', require('./routes/webhook'));
 
-function generateOrderId() {
-    const uniqueId = crypto.randomBytes(16).toString('hex');
+// Admin Routes
+app.use('/api/admin/auth', require('./routes/admin/auth'));
+app.use('/api/admin/students', require('./routes/admin/students'));
+app.use('/api/admin/fees', require('./routes/admin/fees'));
+app.use('/api/admin/transactions', require('./routes/admin/transactions'));
 
-    const hash = crypto.createHash('sha256');
-    hash.update(uniqueId);
-
-    const orderId = hash.digest('hex');
-
-    return orderId.substr(0,12);
-}
-
-
+// Health check
 app.get('/', (req, res) => {
-    res.send('Hello World!');
-})
+  res.json({ 
+    message: 'School Fee Management Portal API',
+    status: 'running'
+  });
+});
 
+const PORT = process.env.PORT || 8000;
 
-app.get('/payment', async (req, res) => {
-
-    try {
-        
-        let request = {
-            "order_amount": 1.00,
-            "order_currency": "INR",
-            "order_id": await generateOrderId(),
-            "customer_details": {
-                "customer_id": "webcodder01",
-                "customer_phone": "9999999999",
-                "customer_name": "Web Codder",
-                "customer_email": "webcodder@example.com"
-            },
-        }
-
-        Cashfree.PGCreateOrder("2023-08-01",request).then(response => {
-            console.log(response.data);
-            res.json(response.data);
-
-        }).catch(error => {
-            console.error(error.response.data.message);
-        })
-
-
-    } catch (error) {
-        console.log(error);
-    }
-
-
-})
-
-app.post('/verify', async (req, res) => {
-
-    try {
-
-        let { orderId } = req.body;
-        
-        Cashfree.PGOrderFetchPayments("2023-08-01",orderId).then((response) => {
-
-            res.json(response.data);
-        }).catch(error => {
-            console.error(error.response.data.message);
-        })
-
-
-    } catch (error) {
-        console.log(error);
-    }
-})
-
-app.listen(8000, () => {
-    console.log('Server is running on port 8000');
-})
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

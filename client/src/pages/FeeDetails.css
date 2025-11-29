@@ -1,0 +1,213 @@
+.fee-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.fee-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.header-section h1 {
+  color: #333;
+  margin: 0;
+}
+
+.logout-btn {
+  background: #f44336;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.logout-btn:hover {
+  background: #d32f2f;
+}
+
+.student-info {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.student-info h2 {
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+.student-info p {
+  color: #666;
+  margin: 5px 0;
+}
+
+.fee-breakdown {
+  margin-bottom: 30px;
+}
+
+.fee-breakdown h3 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.fee-components {
+  margin-bottom: 20px;
+}
+
+.fee-component {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #667eea;
+}
+
+.component-name {
+  color: #333;
+  font-weight: 500;
+}
+
+.component-amount {
+  color: #333;
+  font-weight: 600;
+}
+
+.fee-totals {
+  border-top: 2px solid #e0e0e0;
+  padding-top: 20px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  font-size: 16px;
+}
+
+.total-amount {
+  font-weight: 700;
+  font-size: 18px;
+  color: #333;
+}
+
+.paid-amount {
+  font-weight: 600;
+  color: #4caf50;
+}
+
+.due-amount {
+  font-weight: 600;
+  color: #f44336;
+}
+
+.due-amount.paid {
+  color: #4caf50;
+}
+
+.payment-status {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.paid-status {
+  background: #e8f5e9;
+}
+
+.pending-status {
+  background: #fff3e0;
+}
+
+.status-message {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.pay-now-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pay-now-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.download-receipt-btn {
+  background: #4caf50;
+  color: white;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.download-receipt-btn:hover {
+  background: #45a049;
+}
+
+.no-fee-message {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: white;
+  font-size: 18px;
+}
+
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px;
+  text-align: center;
+}
+
+.back-btn {
+  background: #667eea;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 20px auto;
+  display: block;
+}
+
