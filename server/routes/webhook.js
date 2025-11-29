@@ -53,7 +53,18 @@ const extractPaymentMethod = (paymentMethod) => {
 router.post('/cashfree', async (req, res) => {
   try {
     const event = req.body;
-    console.log('[Webhook] Received event:', event.type);
+    
+    // Log webhook details for verification
+    console.log('\n========== WEBHOOK RECEIVED ==========');
+    console.log('[Webhook] Timestamp:', new Date().toISOString());
+    console.log('[Webhook] Event Type:', event.type);
+    console.log('[Webhook] Request Headers:', {
+      'user-agent': req.headers['user-agent'],
+      'content-type': req.headers['content-type'],
+      'x-forwarded-for': req.headers['x-forwarded-for']
+    });
+    console.log('[Webhook] Payload:', JSON.stringify(event, null, 2));
+    console.log('=======================================\n');
     
     // Cashfree sends different event types
     if (event.type === 'PAYMENT_SUCCESS_WEBHOOK' || event.type === 'PAYMENT_USER_CONFIRMED') {
