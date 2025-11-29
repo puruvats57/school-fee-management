@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import useSessionTimeout from '../../hooks/useSessionTimeout';
 import SessionTimeoutModal from '../../components/SessionTimeoutModal';
+import { SESSION_CONFIG } from '../../config/sessionConfig';
 import './AdminCommon.css';
 
 function AdminFees() {
@@ -19,10 +20,10 @@ function AdminFees() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Session timeout (15 minutes inactivity, 2 minutes warning)
+  // Session timeout
   const { showWarning, timeRemaining, handleStayLoggedIn, handleLogout: handleTimeoutLogout } = useSessionTimeout({
-    timeoutMinutes: 15,
-    warningMinutes: 2,
+    timeoutMinutes: SESSION_CONFIG.timeoutMinutes,
+    warningMinutes: SESSION_CONFIG.warningMinutes,
     logoutEndpoint: '/api/admin/auth/logout',
     redirectPath: '/admin/login',
     enabled: true

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { load } from '@cashfreepayments/cashfree-js';
 import useSessionTimeout from '../hooks/useSessionTimeout';
 import SessionTimeoutModal from '../components/SessionTimeoutModal';
+import { SESSION_CONFIG } from '../config/sessionConfig';
 import './Payment.css';
 
 function Payment() {
@@ -14,10 +15,10 @@ function Payment() {
   const [cashfree, setCashfree] = useState(null);
   const navigate = useNavigate();
 
-  // Session timeout (15 minutes inactivity, 2 minutes warning)
+  // Session timeout
   const { showWarning, timeRemaining, handleStayLoggedIn, handleLogout: handleTimeoutLogout } = useSessionTimeout({
-    timeoutMinutes: 15,
-    warningMinutes: 2,
+    timeoutMinutes: SESSION_CONFIG.timeoutMinutes,
+    warningMinutes: SESSION_CONFIG.warningMinutes,
     logoutEndpoint: '/api/auth/logout',
     redirectPath: '/',
     enabled: true

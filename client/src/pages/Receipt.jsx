@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import useSessionTimeout from '../hooks/useSessionTimeout';
 import SessionTimeoutModal from '../components/SessionTimeoutModal';
+import { SESSION_CONFIG } from '../config/sessionConfig';
 import './Receipt.css';
 
 function Receipt() {
@@ -13,10 +14,10 @@ function Receipt() {
   const location = useLocation();
   const { orderId } = location.state || {};
 
-  // Session timeout (15 minutes inactivity, 2 minutes warning)
+  // Session timeout
   const { showWarning, timeRemaining, handleStayLoggedIn, handleLogout: handleTimeoutLogout } = useSessionTimeout({
-    timeoutMinutes: 15,
-    warningMinutes: 2,
+    timeoutMinutes: SESSION_CONFIG.timeoutMinutes,
+    warningMinutes: SESSION_CONFIG.warningMinutes,
     logoutEndpoint: '/api/auth/logout',
     redirectPath: '/',
     enabled: true
