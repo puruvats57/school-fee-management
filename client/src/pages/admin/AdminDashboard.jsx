@@ -1,12 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import useSessionTimeout from '../../hooks/useSessionTimeout';
+import SessionTimeoutModal from '../../components/SessionTimeoutModal';
 import './AdminDashboard.css';
 
 function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Session timeout (15 minutes inactivity, 2 minutes warning)
+  const { showWarning, timeRemaining, handleStayLoggedIn, handleLogout: handleTimeoutLogout } = useSessionTimeout({
+    timeoutMinutes: 15,
+    warningMinutes: 2,
+    logoutEndpoint: '/api/admin/auth/logout',
+    redirectPath: '/admin/login',
+    enabled: true
+  });
 
   useEffect(() => {
     checkSession();
@@ -77,8 +88,15 @@ function AdminDashboard() {
   }
 
   return (
-    <div className="admin-dashboard-container">
-      <div className="admin-header">
+    <>
+      <SessionTimeoutModal
+        show={showWarning}
+        timeRemaining={timeRemaining}
+        onStayLoggedIn={handleStayLoggedIn}
+        onLogout={handleTimeoutLogout}
+      />
+      <div className="admin-dashboard-container">
+        <div className="admin-header">
         <h1>Admin Dashboard</h1>
         <button onClick={handleLogout} className="logout-btn">Logout</button>
       </div>
@@ -135,6 +153,7 @@ function AdminDashboard() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

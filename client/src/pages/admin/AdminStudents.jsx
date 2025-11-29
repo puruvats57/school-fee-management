@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import useSessionTimeout from '../../hooks/useSessionTimeout';
+import SessionTimeoutModal from '../../components/SessionTimeoutModal';
 import './AdminCommon.css';
 
 function AdminStudents() {
@@ -18,6 +20,15 @@ function AdminStudents() {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  // Session timeout (15 minutes inactivity, 2 minutes warning)
+  const { showWarning, timeRemaining, handleStayLoggedIn, handleLogout: handleTimeoutLogout } = useSessionTimeout({
+    timeoutMinutes: 15,
+    warningMinutes: 2,
+    logoutEndpoint: '/api/admin/auth/logout',
+    redirectPath: '/admin/login',
+    enabled: true
+  });
 
   useEffect(() => {
     checkSession();
@@ -128,7 +139,14 @@ function AdminStudents() {
   if (loading) return <div className="admin-container"><div className="loading">Loading...</div></div>;
 
   return (
-    <div className="admin-container">
+    <>
+      <SessionTimeoutModal
+        show={showWarning}
+        timeRemaining={timeRemaining}
+        onStayLoggedIn={handleStayLoggedIn}
+        onLogout={handleTimeoutLogout}
+      />
+      <div className="admin-container">
       <div className="admin-header">
         <h1>Student Management</h1>
         <button onClick={handleLogout} className="logout-btn">Logout</button>
@@ -259,6 +277,7 @@ function AdminStudents() {
         </div>
       )}
     </div>
+    </>
   );
 }
 

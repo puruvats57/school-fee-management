@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import useSessionTimeout from '../hooks/useSessionTimeout';
+import SessionTimeoutModal from '../components/SessionTimeoutModal';
 import './FeeDetails.css';
 
 function FeeDetails() {
@@ -10,6 +12,15 @@ function FeeDetails() {
   const [verifying, setVerifying] = useState(false);
   const [verifyMessage, setVerifyMessage] = useState('');
   const navigate = useNavigate();
+
+  // Session timeout (15 minutes inactivity, 2 minutes warning)
+  const { showWarning, timeRemaining, handleStayLoggedIn, handleLogout: handleTimeoutLogout } = useSessionTimeout({
+    timeoutMinutes: 15,
+    warningMinutes: 2,
+    logoutEndpoint: '/api/auth/logout',
+    redirectPath: '/',
+    enabled: true
+  });
 
   useEffect(() => {
     checkSessionAndFetchFees();
@@ -161,8 +172,15 @@ function FeeDetails() {
   const { fee, student, lastTransaction } = feeData;
 
   return (
-    <div className="fee-container">
-      <div className="fee-card">
+    <>
+      <SessionTimeoutModal
+        show={showWarning}
+        timeRemaining={timeRemaining}
+        onStayLoggedIn={handleStayLoggedIn}
+        onLogout={handleTimeoutLogout}
+      />
+      <div className="fee-container">
+        <div className="fee-card">
         <div className="header-section">
           <h1>Fee Details</h1>
           <button onClick={handleLogout} className="logout-btn">Logout</button>
@@ -250,6 +268,7 @@ function FeeDetails() {
         )}
       </div>
     </div>
+    </>
   );
 }
 

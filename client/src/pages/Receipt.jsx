@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import useSessionTimeout from '../hooks/useSessionTimeout';
+import SessionTimeoutModal from '../components/SessionTimeoutModal';
 import './Receipt.css';
 
 function Receipt() {
@@ -10,6 +12,15 @@ function Receipt() {
   const navigate = useNavigate();
   const location = useLocation();
   const { orderId } = location.state || {};
+
+  // Session timeout (15 minutes inactivity, 2 minutes warning)
+  const { showWarning, timeRemaining, handleStayLoggedIn, handleLogout: handleTimeoutLogout } = useSessionTimeout({
+    timeoutMinutes: 15,
+    warningMinutes: 2,
+    logoutEndpoint: '/api/auth/logout',
+    redirectPath: '/',
+    enabled: true
+  });
 
   useEffect(() => {
     if (!orderId) {
@@ -73,8 +84,15 @@ function Receipt() {
   const { receipt, student, fee } = receiptData;
 
   return (
-    <div className="receipt-container">
-      <div className="receipt-card">
+    <>
+      <SessionTimeoutModal
+        show={showWarning}
+        timeRemaining={timeRemaining}
+        onStayLoggedIn={handleStayLoggedIn}
+        onLogout={handleTimeoutLogout}
+      />
+      <div className="receipt-container">
+        <div className="receipt-card">
         <div className="receipt-header">
           <h1>Payment Receipt</h1>
           <div className="success-badge">✓ Payment Successful</div>
@@ -164,6 +182,7 @@ function Receipt() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

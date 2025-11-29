@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import useSessionTimeout from '../../hooks/useSessionTimeout';
+import SessionTimeoutModal from '../../components/SessionTimeoutModal';
 import './AdminCommon.css';
 
 function AdminTransactions() {
@@ -16,6 +18,15 @@ function AdminTransactions() {
   });
   const [students, setStudents] = useState([]);
   const navigate = useNavigate();
+
+  // Session timeout (15 minutes inactivity, 2 minutes warning)
+  const { showWarning, timeRemaining, handleStayLoggedIn, handleLogout: handleTimeoutLogout } = useSessionTimeout({
+    timeoutMinutes: 15,
+    warningMinutes: 2,
+    logoutEndpoint: '/api/admin/auth/logout',
+    redirectPath: '/admin/login',
+    enabled: true
+  });
 
   useEffect(() => {
     checkSession();
@@ -98,10 +109,129 @@ function AdminTransactions() {
     }
   };
 
+  // Convert transactions to CSV format
+  const convertToCSV = (data) => {
+    if (!data || data.length === 0) {
+      return '';
+    }
+
+    // CSV Headers
+    const headers = [
+      'Order ID',
+      'Student Name',
+      'Roll Number',
+      'Amount (₹)',
+      'Status',
+      'Payment Method',
+      'Payment ID',
+      'Date',
+      'Time'
+    ];
+
+    // Convert data to CSV rows
+    const rows = data.map(transaction => {
+      const date = new Date(transaction.createdAt);
+      return [
+        transaction.orderId || '',
+        transaction.studentId?.name || 'N/A',
+        transaction.studentId?.rollNumber || 'N/A',
+        transaction.amount?.toFixed(2) || '0.00',
+        transaction.status?.toUpperCase() || '',
+        transaction.paymentMethod || '-',
+        transaction.paymentId || '-',
+        date.toLocaleDateString('en-IN'),
+        date.toLocaleTimeString('en-IN')
+      ];
+    });
+
+    // Escape CSV values (handle commas, quotes, newlines)
+    const escapeCSV = (value) => {
+      if (value === null || value === undefined) return '';
+      const stringValue = String(value);
+      if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+        return `"${stringValue.replace(/"/g, '""')}"`;
+      }
+      return stringValue;
+    };
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.map(escapeCSV).join(','),
+      ...rows.map(row => row.map(escapeCSV).join(','))
+    ].join('\n');
+
+    return csvContent;
+  };
+
+  // Export transactions to CSV
+  const handleExportCSV = async () => {
+    try {
+      // Fetch all transactions with current filters (no pagination limit for export)
+      const params = new URLSearchParams();
+      if (filters.status) params.append('status', filters.status);
+      if (filters.studentId) params.append('studentId', filters.studentId);
+      if (filters.startDate) params.append('startDate', filters.startDate);
+      if (filters.endDate) params.append('endDate', filters.endDate);
+      params.append('limit', '10000'); // Large limit for export
+
+      const response = await axios.get(`http://localhost:8000/api/admin/transactions?${params}`, {
+        withCredentials: true
+      });
+
+      if (response.data.success && response.data.transactions) {
+        const transactions = response.data.transactions;
+        
+        if (transactions.length === 0) {
+          alert('No transactions to export.');
+          return;
+        }
+
+        // Convert to CSV
+        const csvContent = convertToCSV(transactions);
+
+        // Create filename with current date and filters
+        const dateStr = new Date().toISOString().split('T')[0];
+        let filename = `payment_history_${dateStr}`;
+        if (filters.status) filename += `_${filters.status}`;
+        if (filters.startDate) filename += `_from_${filters.startDate}`;
+        if (filters.endDate) filename += `_to_${filters.endDate}`;
+        filename += '.csv';
+
+        // Create blob and download
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up
+        URL.revokeObjectURL(url);
+      } else {
+        alert('Failed to fetch transactions for export.');
+      }
+    } catch (err) {
+      console.error('Error exporting CSV:', err);
+      alert('Error exporting CSV. Please try again.');
+    }
+  };
+
   if (loading) return <div className="admin-container"><div className="loading">Loading...</div></div>;
 
   return (
-    <div className="admin-container">
+    <>
+      <SessionTimeoutModal
+        show={showWarning}
+        timeRemaining={timeRemaining}
+        onStayLoggedIn={handleStayLoggedIn}
+        onLogout={handleTimeoutLogout}
+      />
+      <div className="admin-container">
       <div className="admin-header">
         <h1>Payment History</h1>
         <button onClick={handleLogout} className="logout-btn">Logout</button>
@@ -135,6 +265,39 @@ function AdminTransactions() {
             </div>
           </div>
         )}
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <div style={{ flex: 1 }}>
+            <h3 style={{ margin: 0, marginBottom: '10px' }}>Payment History</h3>
+            <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>
+              {transactions.length} transaction{transactions.length !== 1 ? 's' : ''} found
+            </p>
+          </div>
+          {transactions.length > 0 && (
+            <button
+              onClick={handleExportCSV}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#28a745',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '0.95rem',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'background-color 0.3s'
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#218838'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#28a745'}
+            >
+              <span>📥</span>
+              Export to CSV
+            </button>
+          )}
+        </div>
 
         <div className="filters-section" style={{ background: '#f8f9fa', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
           <h3 style={{ marginTop: 0 }}>Filters</h3>
@@ -224,6 +387,7 @@ function AdminTransactions() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
