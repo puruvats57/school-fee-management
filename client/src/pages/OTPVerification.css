@@ -115,3 +115,96 @@
   text-align: center;
 }
 
+/* Desktop First - Responsive Design */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .otp-card {
+    max-width: 90%;
+    padding: 35px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .otp-container {
+    padding: 15px;
+  }
+  
+  .otp-card {
+    max-width: 100%;
+    padding: 30px;
+    border-radius: 8px;
+  }
+  
+  .otp-title {
+    font-size: 28px;
+  }
+  
+  .otp-subtitle {
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+  
+  .otp-inputs {
+    gap: 8px;
+  }
+  
+  .otp-input {
+    width: 45px;
+    height: 55px;
+    font-size: 22px;
+  }
+  
+  .verify-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+  
+  .resend-btn,
+  .back-btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .otp-container {
+    padding: 10px;
+  }
+  
+  .otp-card {
+    padding: 25px;
+  }
+  
+  .otp-title {
+    font-size: 24px;
+  }
+  
+  .otp-subtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  
+  .otp-inputs {
+    gap: 6px;
+  }
+  
+  .otp-input {
+    width: 40px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .verify-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .resend-btn,
+  .back-btn {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+

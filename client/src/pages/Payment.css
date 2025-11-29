@@ -155,3 +155,120 @@
   font-size: 18px;
 }
 
+/* Desktop First - Responsive Design */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .payment-card {
+    max-width: 90%;
+    padding: 25px;
+  }
+  
+  .header-section {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .payment-container {
+    padding: 15px;
+  }
+  
+  .payment-card {
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .header-section {
+    flex-direction: column;
+    gap: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .header-section h1 {
+    font-size: 20px;
+  }
+  
+  .payment-summary {
+    padding: 15px;
+  }
+  
+  .payment-summary h3 {
+    font-size: 16px;
+  }
+  
+  .summary-row {
+    font-size: 14px;
+  }
+  
+  .due-amount {
+    font-size: 16px;
+  }
+  
+  .form-group label {
+    font-size: 14px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .pay-btn {
+    padding: 14px;
+    font-size: 16px;
+  }
+  
+  .payment-info {
+    padding: 12px;
+    font-size: 13px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .payment-container {
+    padding: 10px;
+  }
+  
+  .payment-card {
+    padding: 15px;
+  }
+  
+  .header-section h1 {
+    font-size: 18px;
+  }
+  
+  .back-btn {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .payment-summary {
+    padding: 12px;
+  }
+  
+  .summary-row {
+    font-size: 13px;
+    padding: 6px 0;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .pay-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+

@@ -69,3 +69,101 @@
   margin: 5px 0;
 }
 
+.retry-btn {
+  background: #2196f3;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.retry-btn:hover {
+  background: #1976d2;
+}
+
+/* Desktop First - Responsive Design */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .payment-callback-card {
+    padding: 35px;
+    min-width: 280px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .payment-callback-container {
+    padding: 15px;
+  }
+  
+  .payment-callback-card {
+    padding: 30px;
+    border-radius: 8px;
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+  }
+  
+  .success-icon,
+  .error-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 40px;
+  }
+  
+  .payment-callback-card h2 {
+    font-size: 22px;
+  }
+  
+  .payment-callback-card p {
+    font-size: 14px;
+  }
+  
+  .retry-btn,
+  .back-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .payment-callback-container {
+    padding: 10px;
+  }
+  
+  .payment-callback-card {
+    padding: 25px;
+  }
+  
+  .spinner {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .success-icon,
+  .error-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 36px;
+  }
+  
+  .payment-callback-card h2 {
+    font-size: 20px;
+  }
+  
+  .payment-callback-card p {
+    font-size: 13px;
+  }
+}
+

@@ -92,3 +92,79 @@
   font-size: 14px;
 }
 
+/* Desktop First - Responsive Design */
+/* Desktop styles are default (above) */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .admin-login-card {
+    max-width: 90%;
+    padding: 35px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .admin-login-container {
+    padding: 15px;
+  }
+  
+  .admin-login-card {
+    max-width: 100%;
+    padding: 30px;
+    border-radius: 8px;
+  }
+  
+  .admin-login-title {
+    font-size: 24px;
+  }
+  
+  .admin-login-subtitle {
+    font-size: 13px;
+    margin-bottom: 25px;
+  }
+  
+  .form-group {
+    margin-bottom: 18px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .submit-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .admin-login-container {
+    padding: 10px;
+  }
+  
+  .admin-login-card {
+    padding: 25px;
+  }
+  
+  .admin-login-title {
+    font-size: 22px;
+  }
+  
+  .admin-login-subtitle {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .submit-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+

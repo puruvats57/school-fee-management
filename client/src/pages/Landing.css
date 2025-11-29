@@ -92,3 +92,78 @@
   font-size: 14px;
 }
 
+/* Desktop First - Responsive Design */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .landing-card {
+    max-width: 90%;
+    padding: 35px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .landing-container {
+    padding: 15px;
+  }
+  
+  .landing-card {
+    max-width: 100%;
+    padding: 30px;
+    border-radius: 8px;
+  }
+  
+  .landing-title {
+    font-size: 28px;
+  }
+  
+  .landing-subtitle {
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+  
+  .form-group {
+    margin-bottom: 18px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .submit-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .landing-container {
+    padding: 10px;
+  }
+  
+  .landing-card {
+    padding: 25px;
+  }
+  
+  .landing-title {
+    font-size: 24px;
+  }
+  
+  .landing-subtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .submit-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+

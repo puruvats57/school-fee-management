@@ -199,3 +199,163 @@
   text-align: center;
 }
 
+/* Desktop First - Responsive Design */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .receipt-card {
+    max-width: 90%;
+    padding: 30px;
+  }
+  
+  .receipt-header h1 {
+    font-size: 28px;
+  }
+  
+  .info-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .receipt-container {
+    padding: 15px;
+  }
+  
+  .receipt-card {
+    max-width: 100%;
+    padding: 25px;
+    border-radius: 8px;
+  }
+  
+  .receipt-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+  }
+  
+  .receipt-header h1 {
+    font-size: 24px;
+  }
+  
+  .receipt-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .receipt-section h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .info-item {
+    gap: 5px;
+  }
+  
+  .label {
+    font-size: 11px;
+  }
+  
+  .value {
+    font-size: 14px;
+  }
+  
+  .fee-item {
+    padding: 10px;
+  }
+  
+  .fee-name,
+  .fee-amount {
+    font-size: 14px;
+  }
+  
+  .total-label {
+    font-size: 16px;
+  }
+  
+  .total-value {
+    font-size: 20px;
+  }
+  
+  .receipt-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .download-btn,
+  .back-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  
+  .receipt-footer {
+    font-size: 13px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .receipt-container {
+    padding: 10px;
+  }
+  
+  .receipt-card {
+    padding: 20px;
+  }
+  
+  .receipt-header h1 {
+    font-size: 20px;
+  }
+  
+  .success-badge {
+    padding: 6px 15px;
+    font-size: 12px;
+  }
+  
+  .receipt-section {
+    padding: 12px;
+  }
+  
+  .receipt-section h3 {
+    font-size: 15px;
+  }
+  
+  .value {
+    font-size: 13px;
+  }
+  
+  .fee-item {
+    padding: 8px;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .total-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .total-label {
+    font-size: 14px;
+  }
+  
+  .total-value {
+    font-size: 18px;
+  }
+  
+  .receipt-footer {
+    font-size: 12px;
+    padding-top: 15px;
+  }
+  
+  .footer-note {
+    font-size: 11px;
+  }
+}
+

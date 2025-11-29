@@ -1,11 +1,14 @@
 .fee-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
   padding: 20px;
+  width: 100%;
 }
 
 .fee-card {
-  max-width: 800px;
+  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   background: white;
   border-radius: 12px;
@@ -209,5 +212,135 @@
   cursor: pointer;
   margin: 20px auto;
   display: block;
+}
+
+/* Desktop First - Responsive Design */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .fee-card {
+    max-width: 90%;
+    padding: 25px;
+  }
+  
+  .header-section {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .header-section h1 {
+    font-size: 24px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .fee-container {
+    padding: 15px;
+  }
+  
+  .fee-card {
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .header-section {
+    flex-direction: column;
+    gap: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .header-section h1 {
+    font-size: 20px;
+  }
+  
+  .student-info {
+    padding: 15px;
+  }
+  
+  .student-info h2 {
+    font-size: 18px;
+  }
+  
+  .fee-component {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
+  
+  .component-name,
+  .component-amount {
+    font-size: 14px;
+  }
+  
+  .total-row {
+    font-size: 14px;
+  }
+  
+  .total-amount {
+    font-size: 16px;
+  }
+  
+  .pay-now-btn,
+  .download-receipt-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  
+  .status-message {
+    font-size: 16px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .fee-container {
+    padding: 10px;
+  }
+  
+  .fee-card {
+    padding: 15px;
+  }
+  
+  .header-section h1 {
+    font-size: 18px;
+  }
+  
+  .student-info {
+    padding: 12px;
+  }
+  
+  .student-info h2 {
+    font-size: 16px;
+  }
+  
+  .student-info p {
+    font-size: 14px;
+  }
+  
+  .fee-breakdown h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .fee-component {
+    padding: 10px;
+  }
+  
+  .total-row {
+    font-size: 13px;
+    padding: 10px 0;
+  }
+  
+  .payment-status {
+    padding: 15px;
+  }
+  
+  .status-message {
+    font-size: 14px;
+  }
 }
 

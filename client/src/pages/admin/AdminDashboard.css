@@ -153,3 +153,157 @@
   font-size: 18px;
 }
 
+/* Desktop First - Responsive Design */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .admin-dashboard-container {
+    padding: 15px;
+  }
+  
+  .admin-header {
+    padding: 15px 20px;
+  }
+  
+  .admin-header h1 {
+    font-size: 24px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+  }
+  
+  .stat-card {
+    padding: 20px;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+  }
+  
+  .actions-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .admin-dashboard-container {
+    padding: 10px;
+  }
+  
+  .admin-header {
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .admin-header h1 {
+    font-size: 20px;
+    width: 100%;
+  }
+  
+  .logout-btn {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .admin-nav {
+    padding: 10px 15px;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .nav-link {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .stat-card {
+    padding: 18px;
+  }
+  
+  .stat-card h3 {
+    font-size: 13px;
+  }
+  
+  .stat-value {
+    font-size: 24px;
+  }
+  
+  .quick-actions {
+    padding: 20px;
+  }
+  
+  .quick-actions h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  
+  .actions-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .action-card {
+    padding: 25px;
+  }
+  
+  .action-icon {
+    font-size: 40px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .admin-dashboard-container {
+    padding: 5px;
+  }
+  
+  .admin-header {
+    padding: 12px;
+    border-radius: 6px;
+  }
+  
+  .admin-header h1 {
+    font-size: 18px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .stat-card {
+    padding: 15px;
+  }
+  
+  .stat-value {
+    font-size: 22px;
+  }
+  
+  .quick-actions {
+    padding: 15px;
+  }
+  
+  .quick-actions h2 {
+    font-size: 16px;
+  }
+  
+  .action-card {
+    padding: 20px;
+  }
+  
+  .action-icon {
+    font-size: 36px;
+  }
+}
+
